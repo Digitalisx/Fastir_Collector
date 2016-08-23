@@ -28,3 +28,11 @@ class Windows8UserReg(_Reg):
     def json_networks_list(self):
         super(Windows8UserReg, self)._json_networks_list(
             r'Software\Microsoft\Windows NT\CurrentVersion\NetworkList\Profiles')
+
+    def csv_hwp_mru(self):
+        super(Windows8UserReg, self)._csv_hwp_mru(
+            r"Software\\HNC\\Hwp\\9.0\\HwpFrame_KOR\\RecentFile")
+
+    def json_hwp_mru(self):
+        super(Windows8UserReg, self)._json_hwp_mru(
+            r"Software\\HNC\\Hwp\\9.0\\HwpFrame_KOR\\RecentFile")

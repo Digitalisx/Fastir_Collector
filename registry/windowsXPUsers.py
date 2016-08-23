@@ -20,3 +20,11 @@ class WindowsXPUserReg(_Reg):
 
     def json_user_assist(self):
         super(WindowsXPUserReg, self)._json_user_assist(-6, False)
+
+    def csv_hwp_mru(self):
+        super(WindowsXPUserReg, self)._csv_hwp_mru(
+            r"Software\\HNC\\Hwp\\9.0\\HwpFrame_KOR\\RecentFile")
+
+    def json_hwp_mru(self):
+        super(WindowsXPUserReg, self)._json_hwp_mru(
+            r"Software\\HNC\\Hwp\\9.0\\HwpFrame_KOR\\RecentFile")

@@ -674,6 +674,48 @@ class _Reg(object):
                 json_writer = get_json_writer(output)
                 write_list_to_json(self.__get_install_folder(), json_writer)
 
+# Added Code Area (Dong Hyun) ----------------------------------------------------
+    
+    def __get_hwp_mru(self,str_hwp_mru):
+        
+        self.logger.info("Extracting HWP MRU")
+        hive_list = self._get_list_from_registry_key(registry_obj.HKEY_USERS, str_hwp_mru)
+        to_csv_list = [("COMPUTER_NAME", "TYPE", "LAST_WRITE_TIME", "HIVE", "KEY_PATH", "ATTR_NAME", "REG_TYPE",
+                        "ATTR_TYPE", "ATTR_DATA")]
+        
+        for item in hive_list:
+
+            if item[KEY_VALUE_STR] == 'VALUE':
+                
+                if item[VALUE_NAME] != "Count":
+                    
+                    pidl = shell.StringAsPIDL(item[VALUE_DATA])
+                    path = shell.SHGetPathFromIDList(pidl)
+                    to_csv_list.append((self.computer_name,
+                                        "HWP MRU",
+                                        item[VALUE_LAST_WRITE_TIME],
+                                        "HKEY_USERS",
+                                        item[VALUE_PATH],
+                                        item[VALUE_NAME],
+                                        item[KEY_VALUE_STR],
+                                        registry_obj.get_str_type(item[VALUE_TYPE]), path))
+        
+        return to_csv_list        
+    
+    def _csv_hwp_mru(self, str_hwp_mru):
+
+        with open(self.output_dir + "\\" + self.computer_name + "_HWP_MRU" + self.rand_ext, "wb") as output:
+            csv_writer = get_csv_writer(output)
+            write_list_to_csv(self.__get_hwp_mru(str_hwp_mru), csv_writer)
+
+    def _json_hwp_mru(self,str_hwp_mru):
+        if self.destination == 'local':
+            with open(os.path.join(self.output_dir, '%s_HWP_MRU.json' % self.computer_name), 'wb') as output:
+                json_writer = get_json_writer(output)
+                write_list_to_json(self.__get_hwp_mru(str_hwp_mru), json_writer)
+
+# ---------------------------------------------------------------------------------------------    
+
     def __get_shell_bags(self):
         """
             Extracts shellbags: size, view, icon and position of graphical windows
